@@ -27,11 +27,11 @@
             },
             titleChanged($event) {
                 this.note.title = $event.target.innerHTML;
-                this.$emit('noteUpdated', this.note)
+                this.$emit('updateNote', this.note)
             },
             bodyChanged($event) {
                 this.note.body = $event.target.innerHTML;
-                this.$emit('noteUpdated', this.note)
+                this.$emit('updateNote', this.note)
             }
         }
     }

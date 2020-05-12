@@ -6,6 +6,8 @@
 </template>
 
 <script>
+    import authService from "../services/auth_service";
+
     export default {
         name: "Navbar",
         props: {
@@ -13,7 +15,7 @@
         },
         methods: {
             logout() {
-                console.log('Logout');
+                authService.logout();
             }
         }
     }

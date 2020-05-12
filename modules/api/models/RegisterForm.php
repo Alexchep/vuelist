@@ -9,10 +9,10 @@ use yii\base\Exception;
 use yii\db\ActiveRecord;
 
 /**
- * Class SignUpForm
+ * Class RegisterForm
  * @package app\modules\api\models
  */
-class SignUpForm extends Model
+class RegisterForm extends Model
 {
     public $username;
     public $password;

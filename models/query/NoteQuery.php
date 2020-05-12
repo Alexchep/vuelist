@@ -12,11 +12,6 @@ use app\models\Note;
  */
 class NoteQuery extends ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
-
     /**
      * {@inheritdoc}
      * @return Note[]|array
@@ -33,5 +28,14 @@ class NoteQuery extends ActiveQuery
     public function one($db = null)
     {
         return parent::one($db);
+    }
+
+    /**
+     * @param $id
+     * @return NoteQuery
+     */
+    public function byUser($id)
+    {
+        return $this->andWhere(['created_by' => $id]);
     }
 }

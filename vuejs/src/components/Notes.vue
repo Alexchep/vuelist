@@ -3,7 +3,7 @@
         <add-new-button @addNote="addNote" />
         <div class="tc-notes">
             <note v-for="(note, index) in notes" :key="index" :note="note"
-                  @deleteNote="deleteNote" @noteUpdated="noteUpdated"/>
+                  @deleteNote="deleteNote" @updateNote="updateNote"/>
         </div>
     </div>
 </template>
@@ -11,30 +11,40 @@
 <script>
     import AddNewButton from "./AddNewButton";
     import Note from "./Note";
+    import notesService from "../services/notes_service";
 
     export default {
         name: "Notes",
         components: {Note, AddNewButton},
         data() {
             return {
-                notes: [
-                    {title: 'First note', body: 'I am the 1st note'},
-                    {title: 'Second note', body: 'I am the 2st note'},
-                    {title: 'Third note', body: 'I am the 3st note'},
-                    {title: 'Fourth note', body: 'I am the 4st note'},
-                    {title: 'Fifth note', body: 'I am the 5st note'}
-                ]
+                notes: []
             }
         },
         methods: {
-            addNote() {
-                this.notes.unshift({title: '', body: ''});
+            async addNote() {
+                const {status, data} = await notesService.create({title: '', body: ''});
+
+                if (status === 201) {
+                    this.notes.unshift(data);
+                }
             },
-            deleteNote(note) {
-                this.notes.splice(this.notes.indexOf(note), 1);
+            async updateNote(note) {
+                const response = await notesService.update(note);
             },
-            noteUpdated(note) {
-                console.log(note);
+            async deleteNote(note) {
+                const {status, data} = await notesService.delete(note.id);
+
+                if (status === 204) {
+                    this.notes.splice(this.notes.indexOf(note), 1);
+                }
+            }
+        },
+        async mounted() {
+            const {status, data} = await notesService.get();
+
+            if (status === 200) {
+                this.notes = data;
             }
         }
     }

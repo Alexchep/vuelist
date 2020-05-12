@@ -3,7 +3,9 @@
 namespace app\modules\api\controllers;
 
 use app\modules\api\resources\NoteResource;
+use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBearerAuth;
+use yii\filters\Cors;
 use yii\rest\ActiveController;
 
 /**
@@ -22,10 +24,37 @@ class NoteController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::class
-        ];
+        $auth = $behaviors['authenticator'];
+
+        $auth['authMethods'] = [HttpBearerAuth::class];
+
+        unset($behaviors['authenticator']);
+
+        $behaviors['cors'] = ['class' => Cors::class];
+
+        $behaviors['authenticator'] = $auth;
 
         return $behaviors;
+    }
+
+    /**
+     * @return array
+     */
+    public function actions()
+    {
+        $actions = parent::actions();
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+
+        return $actions;
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function prepareDataProvider()
+    {
+        return new ActiveDataProvider([
+            'query' => $this->modelClass::find()->byUser(\Yii::$app->user->id)
+        ]);
     }
 }

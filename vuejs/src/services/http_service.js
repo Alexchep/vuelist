@@ -2,6 +2,7 @@ import axios from 'axios';
 import authService from "./auth_service";
 import router from '../router';
 
+/** Dividing entry point by env */
 const API_ENDPOINT = process.env.VUE_APP_API_ENDPOINT || `http://list.ll:8081/`;
 
 /** Default config for axios instance */
@@ -17,7 +18,6 @@ const authInterceptor = config => {
     config.headers.Authorization = `Bearer ${authService.getToken()}`;
     return config;
 };
-
 
 /** Adding the request interceptors */
 httpClient.interceptors.request.use(authInterceptor);

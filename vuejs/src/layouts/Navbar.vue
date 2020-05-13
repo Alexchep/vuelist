@@ -31,7 +31,7 @@
         line-height: 50px;
         background-color: #1f5d6b;
         color: #fff;
-        padding: 0;
+        padding: 0 20px 0 0;
         text-align: right;
         transition: font-weight 0.3s;
     }

@@ -1,5 +1,6 @@
 import httpClient from "./http_service";
 
+/** Wrapper for request */
 const notesService = {
     create(note) {
         return httpClient.post('notes', note)

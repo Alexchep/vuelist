@@ -2,7 +2,7 @@
 
 namespace app\modules\api\controllers;
 
-use app\modules\api\resources\NoteResource;
+use app\models\Note;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\Cors;
@@ -15,7 +15,7 @@ use yii\rest\ActiveController;
 class NoteController extends ActiveController
 {
     /** @var string */
-    public $modelClass = NoteResource::class;
+    public $modelClass = Note::class;
 
     /**
      * @return array

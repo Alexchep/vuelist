@@ -2,15 +2,16 @@
 
 namespace app\modules\api\controllers;
 
-use app\modules\api\resources\UserResource;
-use app\modules\api\models\LoginForm;
-use app\modules\api\models\RegisterForm;
+use app\models\User;
+use app\models\LoginForm;
+use app\models\RegisterForm;
 use yii\filters\Cors;
 use yii\rest\Controller;
 use Yii;
 use yii\web\UnauthorizedHttpException;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\Exception;
 
 /**
  * Class UserController
@@ -28,7 +29,7 @@ class UserController extends Controller
 
     /**
      * Аутентификация пользователя
-     * @return UserResource|array|null
+     * @return User|array|null
      */
     public function actionLogin()
     {
@@ -45,14 +46,15 @@ class UserController extends Controller
 
     /**
      * Регистрация пользователя
-     * @return array|bool
+     * @return array|ActiveRecord
+     * @throws Exception
      */
     public function actionRegister()
     {
         $model = new RegisterForm();
 
         if ($model->load(Yii::$app->request->post(), '') && $model->register()) {
-            return $model->_user;
+            return $model->getUser();
         }
 
         Yii::$app->response->statusCode = 422;
@@ -74,7 +76,7 @@ class UserController extends Controller
 
         $accessToken = explode(' ', $headers['Authorization'])[1];
 
-        $user = UserResource::findIdentityByAccessToken($accessToken);
+        $user = User::findIdentityByAccessToken($accessToken);
 
         if (!$user) {
             throw new UnauthorizedHttpException();

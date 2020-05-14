@@ -1,5 +1,8 @@
 module.exports = {
-    devServer: {
-        host: 'list.ll'
-    }
+  "devServer": {
+    "host": "list.ll"
+  },
+  "transpileDependencies": [
+    "vuetify"
+  ]
 }

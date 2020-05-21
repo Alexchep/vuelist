@@ -1,32 +1,93 @@
 <template>
-    <div class="tc-notes-wrapper">
-        <add-new-button @addNote="addNote" />
-        <div class="tc-notes">
+    <v-app>
+        <v-dialog v-model="dialog" persistent max-width="400px">
+            <template v-slot:activator="{on}">
+                <v-btn class="create-button" dark fab top fixed bottom left color="green" v-on="on" @click="resetValidation">
+                    <v-icon>mdi-plus</v-icon>
+                </v-btn>
+            </template>
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Creating note</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12">
+                                <div v-if="errors" class="errors">
+                                    <v-alert mode="dense" type="error" color="red" border="left" text :key="field"
+                                             v-for="(error, field) in errors[0]">
+                                        {{error[0].message}}
+                                    </v-alert>
+                                </div>
+                                <v-form @submit.prevent="addNote" action="" v-model="valid" ref="form">
+                                    <v-text-field v-model="form.title" :rules="titleRules" label="Title"></v-text-field>
+                                    <v-text-field v-model="form.body" :rules="bodyRules" label="Body"></v-text-field>
+                                </v-form>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialog=false">Close</v-btn>
+                    <v-btn :disabled="!valid" class="create-button" @click="addNote" color="info">Create</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-row class="notes pa-md-5 pa-sm-4 pa-4 mb-6">
             <note v-for="(note, index) in notes" :key="index" :note="note"
                   @deleteNote="deleteNote" @updateNote="updateNote"/>
-        </div>
-    </div>
+        </v-row>
+    </v-app>
 </template>
 
 <script>
-    import AddNewButton from "./AddNewButton";
     import Note from "./Note";
     import notesService from "../services/notes_service";
 
     export default {
         name: "Notes",
-        components: {Note, AddNewButton},
+        components: {Note},
         data() {
             return {
-                notes: []
+                dialog: false,
+                notes: [],
+                form: {
+                    title: '',
+                    body: ''
+                },
+                errors: null,
+                valid: true,
+                titleRules: [
+                    v => !!v || 'Title is required',
+                    v => v.length < 16 || 'Title must be less than 15 characters'
+                ],
+                bodyRules: [
+                    v => !!v || 'Body is required',
+                    v => v.length < 101 || 'Body must be less than 100 characters',
+                ]
             }
         },
         methods: {
+            resetValidation () {
+                this.$refs.form.resetValidation();
+            },
             async addNote() {
-                const {status, data} = await notesService.create({title: '', body: ''});
+                if (!this.$refs.form.validate()) {
+                    return false;
+                }
+
+                const {status, data} = await notesService.create(this.form);
 
                 if (status === 201) {
+                    this.form.title = '';
+                    this.form.body = '';
                     this.notes.unshift(data);
+                    this.dialog = false;
+                } else {
+                    this.errors = data;
                 }
             },
             async updateNote(note) {
@@ -51,14 +112,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .tc-notes-wrapper {
-        padding: 30px;
-
-        .tc-notes {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 0 auto;
-        }
+    .notes {
+        margin-top: 120px;
     }
 </style>

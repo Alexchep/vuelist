@@ -48,9 +48,10 @@ class Note extends ActiveRecord
     public function rules()
     {
         return [
-            [['body'], 'string'],
-            [['created_at', 'updated_at', 'created_by'], 'integer'],
-            [['title'], 'string', 'max' => 255],
+            ['title', 'required'],
+            ['title', 'string', 'max' => 15],
+            ['body', 'string', 'max' => 100],
+            [['created_at', 'updated_at', 'created_by'], 'integer']
         ];
     }
 

@@ -1,4 +1,5 @@
 import httpClient from "./http_service";
+import router from '../router';
 
 const authService = {
     user: null,
@@ -87,7 +88,7 @@ const authService = {
      */
     logout() {
         localStorage.removeItem('ACCESS_TOKEN');
-        this.$router.push('login');
+        router.push('login');
     }
 }
 

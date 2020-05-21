@@ -1,8 +1,11 @@
 <template>
     <div id="app">
-        <div id="nav">
-        </div>
+        <div id="nav"></div>
         <router-view/>
+        <v-footer height="35px" dark inset app>
+            <v-spacer></v-spacer>
+            <div>&copy;<b>{{ new Date().getFullYear() }}</b></div>
+        </v-footer>
     </div>
 </template>
 
@@ -21,6 +24,6 @@
 
     #app {
       font-family: 'Roboto', sans-serif;
-      background-color: #ececec;
+      background: url('assets/bg-img.jpg') repeat center center;
     }
 </style>

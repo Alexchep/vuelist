@@ -1,5 +1,7 @@
 <?php
 
+$config = [];
+
 if (file_exists(__DIR__ . '/db-local.php')) {
     $config = require_once __DIR__ . '/db-local.php';
 }

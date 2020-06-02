@@ -2,7 +2,7 @@
     <v-app>
         <v-dialog v-model="dialog" persistent max-width="400px">
             <template v-slot:activator="{on}">
-                <v-btn class="create-button" dark fab top fixed bottom left color="green" v-on="on" @click="resetValidation">
+                <v-btn class="create-button" dark fab top fixed bottom left color="green" v-on="on">
                     <v-icon>mdi-plus</v-icon>
                 </v-btn>
             </template>
@@ -30,7 +30,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="dialog=false">Close</v-btn>
+                    <v-btn color="blue darken-1" text @click="resetValidation">Close</v-btn>
                     <v-btn :disabled="!valid" class="create-button" @click="addNote" color="info">Create</v-btn>
                 </v-card-actions>
             </v-card>
@@ -62,16 +62,16 @@
                 valid: true,
                 titleRules: [
                     v => !!v || 'Title is required',
-                    v => v.length < 16 || 'Title must be less than 15 characters'
+                    v => v.length <= 25 || 'Max length of title is 25 characters'
                 ],
                 bodyRules: [
-                    v => !!v || 'Body is required',
-                    v => v.length < 101 || 'Body must be less than 100 characters',
+                    v => v.length <= 100 || 'Max length of body is 100 characters',
                 ]
             }
         },
         methods: {
-            resetValidation () {
+            resetValidation() {
+                this.dialog = false;
                 this.$refs.form.resetValidation();
             },
             async addNote() {

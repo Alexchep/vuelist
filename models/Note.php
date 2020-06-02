@@ -49,7 +49,7 @@ class Note extends ActiveRecord
     {
         return [
             ['title', 'required'],
-            ['title', 'string', 'max' => 15],
+            ['title', 'string', 'max' => 25],
             ['body', 'string', 'max' => 100],
             [['created_at', 'updated_at', 'created_by'], 'integer']
         ];

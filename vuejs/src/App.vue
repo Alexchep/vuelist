@@ -4,7 +4,7 @@
         <router-view/>
         <v-footer height="35px" dark inset app>
             <v-spacer></v-spacer>
-            <div>&copy;<b>{{ new Date().getFullYear() }}</b></div>
+            <div>&copy;<b> Alexchep {{ new Date().getFullYear() }}</b></div>
         </v-footer>
     </div>
 </template>
